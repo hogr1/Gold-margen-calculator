@@ -1,0 +1,57 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gold Margin Calculator</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f8f9fa; padding: 20px; }
+    .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    input { width: 100%; padding: 10px; margin: 10px 0; }
+    button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #0056b3; }
+    .result { margin-top: 20px; background: #e9ecef; padding: 15px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Gold Margin Calculator</h2>
+    <label>Deposit ($):</label>
+    <input type="number" id="deposit" value="1000" /><label>Leverage (e.g., 100 for 1:100):</label>
+<input type="number" id="leverage" value="100" />
+
+<label>Gold Price per Ounce ($):</label>
+<input type="number" id="goldPrice" value="3300" />
+
+<label>Number of Ounces:</label>
+<input type="number" id="ounces" value="2" />
+
+<button onclick="calculateMargin()">Calculate</button>
+
+<div class="result" id="output"></div>
+
+  </div>  <script>
+    function calculateMargin() {
+      const deposit = parseFloat(document.getElementById('deposit').value);
+      const leverage = parseFloat(document.getElementById('leverage').value);
+      const goldPrice = parseFloat(document.getElementById('goldPrice').value);
+      const ounces = parseFloat(document.getElementById('ounces').value);
+
+      const positionValue = goldPrice * ounces;
+      const usedMargin = positionValue / leverage;
+
+      const lossTo100Percent = deposit - usedMargin;
+      const dropTo100Percent = lossTo100Percent / ounces;
+      const priceAt100Percent = goldPrice - dropTo100Percent;
+
+      const dropToZero = deposit / ounces;
+      const priceAtZero = goldPrice - dropToZero;
+
+      document.getElementById('output').innerHTML = `
+        <strong>Results:</strong><br/>
+        Used Margin: $${usedMargin.toFixed(2)}<br/>
+        Gold Price when Margin Level = 100%: $${priceAt100Percent.toFixed(2)}<br/>
+        Gold Price when Account = Zero: $${priceAtZero.toFixed(2)}
+      `;
+    }
+  </script></body>
+</html>
